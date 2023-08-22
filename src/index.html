@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketLesson</title>
+    <style>
+        .message-area{
+            width:500px;
+            height:800px;
+            border:1px solid #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .form-area{
+            padding:10px
+        }
+        button{
+            padding:10px
+        }
+
+        .dv{
+            width:470px;
+            height:740px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="message-area">
+       <div class="form-area">
+            <input type="text" class="input-message">
+            <input type="text" placeholder="to" class="to">
+            <button class="send-btn" onclick="sendM()">Enviar</button>
+            <div class="dv">
+
+            </div>
+       </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js" integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const socket = io("http://localhost:3000");
+
+        let name = prompt("Your name");
+        let message = document.querySelector(".input-message");
+        let dv = document.querySelector(".dv");
+        let a = document.querySelector(".to");
+
+        socket.on(`${name}`,(data) => {
+            dv.innerHTML+=`<strong>${data.name}:</strong> ${data.message}<br\>`;
+        })
+
+        const sendM = () => {
+            socket.emit(`msg`,{name,message:message.value, to:a.value});
+            socket.emit(`msg2`,{name,message:message.value, to:a.value});
+        }
+
+    </script>
+</body>
+</html>
